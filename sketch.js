@@ -35,9 +35,6 @@ function setup() {
 
 function draw() {
   for (var i = 0; i < asteroids.length; i++) {
-    for (var j = 0; i < asteroids.length; i++) {
-      asteroids[i].collide(asteroids[j]);
-    }
     if (ship.hits(asteroids[i]) && canPlay) {
       canPlay = false;
       ship.destroy();
@@ -51,6 +48,11 @@ function draw() {
       }, 3000);
     }
     asteroids[i].update();
+  }
+  for (var i = 0; i < asteroids.length; i++) {
+    for (var j = 0; i < asteroids.length; i++) {
+      asteroids[i].collide(asteroids[j]);
+    }
   }
 
   for (var i = lasers.length - 1; i >= 0; i--) {
