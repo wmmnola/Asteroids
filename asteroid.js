@@ -84,9 +84,13 @@ function Asteroid(pos, r, size) {
       if (d <= this.r + a.r) {
         this.vel.x *= -1;
         this.vel.y *= -1;
+        this.pos.x += 5;
+        this.pos.y += 5;
 
         a.vel.x *= -1;
         a.vel.y *= -1;
+        a.pos.x += 5;
+        a.pos.y += 5;
       }
     }
   }
