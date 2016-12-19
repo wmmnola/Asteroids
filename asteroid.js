@@ -16,11 +16,13 @@ function Asteroid(pos, r, size) {
 
   //smaller asteroids go a bit faster
   this.size = size;
-  switch(size) {
+  switch (size) {
     case 1:
-      this.vel.mult(1.5); break;
+      this.vel.mult(1.5);
+      break;
     case 0:
-      this.vel.mult(2); break;
+      this.vel.mult(2);
+      break;
   }
 
 
@@ -28,7 +30,7 @@ function Asteroid(pos, r, size) {
   for (var i = 0; i < this.total; i++) {
     this.offset[i] = random(-this.r * 0.2, this.r * 0.5);
   }
-  
+
   // Calculate minimum and maximum radii squared
   this.rmin2 = Math.pow(this.r + min(this.offset), 2);
   this.rmax2 = Math.pow(this.r + max(this.offset), 2);
@@ -51,26 +53,42 @@ function Asteroid(pos, r, size) {
     pop();
   }
 
-  this.playSoundEffect = function(soundArray){
-    soundArray[floor(random(0,soundArray.length))].play();
+  this.playSoundEffect = function(soundArray) {
+    soundArray[floor(random(0, soundArray.length))].play();
   }
 
   this.breakup = function() {
-    if(size > 0)
-      return [new Asteroid(this.pos, this.r, this.size-1), new Asteroid(this.pos, this.r, this.size-1)];
+    if (size > 0)
+      return [new Asteroid(this.pos, this.r, this.size - 1), new Asteroid(
+        this.pos, this.r, this.size - 1)];
     else
       return [];
   }
 
   this.vertices = function() {
     var vertices = []
-    for(var i = 0; i < this.total; i++) {
+    for (var i = 0; i < this.total; i++) {
       var angle = this.heading + map(i, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i];
-      vertices.push(p5.Vector.add(createVector(r * cos(angle), r * sin(angle)), this.pos));
+      vertices.push(p5.Vector.add(createVector(r * cos(angle), r * sin(angle)),
+        this.pos));
     }
 
     return vertices;
+  }
+  this.collide = function(a) {
+    if (a == this) {
+      return;
+    } else {
+      var d = p5.Vector.dist(this.pos, a.pos);
+      if (d <= this.r + a.r) {
+        this.vel.x *= -1;
+        this.vel.y *= -1;
+
+        a.vel.x *= -1;
+        a.vel.y *= -1;
+      }
+    }
   }
 }
 

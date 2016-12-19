@@ -14,11 +14,11 @@ var canPlay = true;
 var shieldTime = 180;
 
 function preload() {
-  for (var i =0; i < 3; i++){
-    laserSoundEffects[i] = loadSound('audio/pew-'+i+'.mp3');
+  for (var i = 0; i < 3; i++) {
+    laserSoundEffects[i] = loadSound('audio/pew-' + i + '.mp3');
   }
-  for (var i =0; i < 3; i++){
-    explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
+  for (var i = 0; i < 3; i++) {
+    explosionSoundEffects[i] = loadSound('audio/explosion-' + i + '.mp3');
   }
 }
 var score = 0;
@@ -34,14 +34,17 @@ function setup() {
 }
 
 function draw() {
-  for(var i = 0; i < asteroids.length; i++) {
-    if(ship.hits(asteroids[i]) && canPlay) {
+  for (var i = 0; i < asteroids.length; i++) {
+    for (var j = 0; i < asteroids.length; i++) {
+      asteroids[i].collide(asteroids[j]);
+    }
+    if (ship.hits(asteroids[i]) && canPlay) {
       canPlay = false;
       ship.destroy();
       input.reset();
       setTimeout(function() {
         lives--;
-        if(lives >= 0) {
+        if (lives >= 0) {
           ship = new Ship();
           canPlay = true;
         }
@@ -50,9 +53,9 @@ function draw() {
     asteroids[i].update();
   }
 
-  for(var i = lasers.length - 1; i >= 0; i--) {
+  for (var i = lasers.length - 1; i >= 0; i--) {
     lasers[i].update();
-    if(lasers[i].offscreen()) {
+    if (lasers[i].offscreen()) {
       lasers.splice(i, 1);
 
       continue;
@@ -69,7 +72,7 @@ function draw() {
         asteroids = asteroids.concat(newAsteroids);
         asteroids.splice(j, 1);
         lasers.splice(i, 1);
-        if(asteroids.length == 0) {
+        if (asteroids.length == 0) {
           level++;
           spawnAsteroids();
           ship.shields = shieldTime;
@@ -87,7 +90,7 @@ function draw() {
       dust.splice(i, 1);
     }
   }
-  
+
   // Render
   background(0);
 
@@ -101,14 +104,14 @@ function draw() {
 
   ship.render();
   hud.render();
-  
+
   for (var i = dust.length - 1; i >= 0; i--) {
     dust[i].render();
   }
 }
 
 function spawnAsteroids() {
-  for(var i = 0; i < level + 5; i++) {
+  for (var i = 0; i < level + 5; i++) {
     asteroids.push(new Asteroid(null, null, 2));
   }
 }
@@ -124,7 +127,7 @@ function lineIntersect(l1v1, l1v2, l2v1, l2v2) {
   var direction_cross = cross(l2_vector, l1_vector);
   var t = cross(base, l1_vector) / direction_cross;
   var u = cross(base, l2_vector) / direction_cross;
-  if(t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
     return true;
   } else {
     return false;
