@@ -39,6 +39,11 @@ function Asteroid(pos, r, size) {
 
   this.render = function() {
     push();
+    fill(255, 0, 0);
+    ellipse(this.pos.x, this.pos.y, this.r, this.r);
+    pop();
+
+    push();
     stroke(255);
     noFill();
     translate(this.pos.x, this.pos.y);
@@ -77,6 +82,7 @@ function Asteroid(pos, r, size) {
     return vertices;
   }
   this.collide = function(a) {
+
     if (a == this) {
       return;
     } else {
